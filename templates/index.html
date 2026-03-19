@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Resume Optimizer — AI-Powered Resume Rewriting</title>
+    <meta name="description" content="Instantly optimize your resume with AI. ATS-friendly, professional rewrites in seconds. Free tier available.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero">
+        <div class="container">
+            <h1>Instant Resume Optimizer</h1>
+            <p class="tagline">AI-powered resume rewriting. Get hired faster.</p>
+            <div class="badge">Free tier available</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="form-section">
+            <div class="grid">
+                <div class="editor">
+                    <h2>Paste Your Resume</h2>
+                    <textarea id="resumeInput" placeholder="Paste your current resume text here... (no file upload, just copy-paste)"></textarea>
+                    <div class="controls">
+                        <label>
+                            Tone:
+                            <select id="tone">
+                                <option value="professional">Professional</option>
+                                <option value="concise">Concise</option>
+                                <option value="creative">Creative</option>
+                            </select>
+                        </label>
+                        <label class="email-label">
+                            Email (optional, gives you 3 free rewrites/month instead of 1):
+                            <input type="email" id="emailInput" placeholder="you@example.com">
+                        </label>
+                        <button id="rewriteBtn" onclick="rewriteResume()">✨ Optimize Resume</button>
+                    </div>
+                </div>
+                <div class="output">
+                    <h2>Optimized Resume</h2>
+                    <div id="outputArea" class="output-box">
+                        <p class="placeholder">Your optimized resume will appear here...</p>
+                    </div>
+                    <div class="actions" id="actionButtons" style="display: none;">
+                        <button onclick="copyToClipboard()">📋 Copy Text</button>
+                        <button onclick="downloadPDF()">📄 Download PDF</button>
+                        <button onclick="showUpgrade()">🚀 Unlimited - $15/mo</button>
+                    </div>
+                    <p id="usageCounter" class="usage-info"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="pricing-section">
+            <h2>Simple Pricing</h2>
+            <div class="pricing-grid">
+                <div class="plan">
+                    <h3>Free</h3>
+                    <div class="price">$0</div>
+                    <p class="limit">1 rewrite (no email)<br>3 rewrites/month with email</p>
+                    <button class="secondary" disabled>Current Plan</button>
+                </div>
+                <div class="plan featured">
+                    <div class="popular">Most Popular</div>
+                    <h3>Unlimited Monthly</h3>
+                    <div class="price">$15<span>/month</span></div>
+                    <p class="features">• Up to 30 rewrites/month<br>• PDF export<br>• Priority support</p>
+                    {% if stripe_monthly %}
+                    <a href="{{ stripe_monthly }}" class="button primary" target="_blank">Subscribe</a>
+                    {% else %}
+                    <button class="primary" onclick="alert('Stripe link not configured. Contact admin.'); return false;">Subscribe</button>
+                    {% endif %}
+                </div>
+                <div class="plan">
+                    <h3>Single Rewrite</h3>
+                    <div class="price">$7<span>/one-time</span></div>
+                    <p class="features">• One professional rewrite<br>• PDF included<br>• No subscription</p>
+                    {% if stripe_single %}
+                    <a href="{{ stripe_single }}" class="button primary" target="_blank">Pay Now</a>
+                    {% else %}
+                    <button class="primary" onclick="alert('Stripe link not configured.'); return false;">Pay Now</button>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <section class="faq">
+            <h2>How It Works</h2>
+            <ul>
+                <li><strong>Paste</strong> your current resume into the text area.</li>
+                <li><strong>Choose</strong> your preferred tone (professional, concise, creative).</li>
+                <li><strong>Click</strong> Optimize — AI rewrites in seconds.</li>
+                <li><strong>Copy</strong> the result or download as PDF.</li>
+            </ul>
+            <p>No account required for free tier. All processing happens instantly via OpenRouter AI.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Instant Resume Optimizer. Faceless, automated, effective.</p>
+            <p>
+                <a href="/">Home</a> |
+                <a href="/tips">Resume Tips</a> |
+                <a href="/health">Health</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let optimizedText = '';
+
+        async function rewriteResume() {
+            const btn = document.getElementById('rewriteBtn');
+            const outputArea = document.getElementById('outputArea');
+            const resume = document.getElementById('resumeInput').value.trim();
+            const tone = document.getElementById('tone').value;
+            const email = document.getElementById('emailInput').value.trim();
+
+            if (!resume) {
+                alert('Please paste your resume first.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+            outputArea.innerHTML = '<p class="loading">AI is optimizing your resume...</p>';
+
+            try {
+                const resp = await fetch('/rewrite', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ resume, tone, email })
+                });
+                const data = await resp.json();
+
+                if (!resp.ok) {
+                    if (data.error === 'free_limit_exceeded') {
+                        outputArea.innerHTML = `<p>${data.message}</p><p><a href="${data.upgrade_url}" target="_blank">Upgrade now →</a></p>`;
+                    } else {
+                        outputArea.innerHTML = `<p class="error">Error: ${data.error || 'Unknown'}</p>`;
+                    }
+                } else {
+                    optimizedText = data.resume;
+                    outputArea.innerHTML = `<pre class="result">${escapeHtml(optimizedText)}</pre>`;
+                    document.getElementById('actionButtons').style.display = 'flex';
+                    updateUsageCounter();
+                }
+            } catch (err) {
+                outputArea.innerHTML = `<p class="error">Network error: ${err.message}</p>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '✨ Optimize Resume';
+            }
+        }
+
+        async function updateUsageCounter() {
+            const email = document.getElementById('emailInput').value.trim();
+            try {
+                const url = '/rewrites_remaining' + (email ? '?email=' + encodeURIComponent(email) : '');
+                const resp = await fetch(url);
+                const data = await resp.json();
+                document.getElementById('usageCounter').textContent = data.message;
+            } catch (e) {
+                document.getElementById('usageCounter').textContent = '';
+            }
+        }
+
+        // Update usage on email change
+        document.getElementById('emailInput').addEventListener('change', updateUsageCounter);
+        // Initial check
+        updateUsageCounter();
+
+        // Focus input
+        document.getElementById('resumeInput').focus();
+    </script>
+</body>
+</html>

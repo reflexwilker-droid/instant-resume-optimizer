@@ -1,0 +1,327 @@
+/* Instant Resume Optimizer — Clean, Professional Styling */
+
+:root {
+    --primary: #1a56db;
+    --primary-dark: #1e40af;
+    --accent: #10b981;
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --bg: #f9fafb;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --success: #10b981;
+    --error: #ef4444;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header */
+.hero {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 3rem 0;
+    text-align: center;
+}
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.tagline {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+}
+.badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+}
+
+/* Form Section */
+.form-section {
+    padding: 2rem 0;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr; }
+}
+
+.editor, .output {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.editor h2, .output h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+textarea {
+    width: 100%;
+    height: 400px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.875rem;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.controls label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+    color: var(--text);
+}
+.controls select {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+.email-label input {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    width: 220px;
+}
+button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-top: auto;
+}
+
+/* Output */
+.output-box {
+    min-height: 400px;
+    max-height: 500px;
+    overflow-y: auto;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.placeholder {
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.result {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.loading {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.error {
+    color: var(--error);
+}
+
+.actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.actions button {
+    flex: 1;
+    min-width: 140px;
+}
+
+.usage-info {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    text-align: center;
+}
+
+/* Pricing */
+.pricing-section {
+    padding: 3rem 0;
+    text-align: center;
+}
+.pricing-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.plan {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+}
+.plan.featured {
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px rgba(26,86,219,0.15);
+}
+.popular {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.plan h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+.price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+.price span {
+    font-size: 1rem;
+    color: var(--text-light);
+    font-weight: 400;
+}
+.features {
+    list-style: none;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    line-height: 1.8;
+}
+.button {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+}
+.button.secondary {
+    background: var(--bg);
+    color: var(--text-light);
+    border: 1px solid var(--border);
+}
+
+/* FAQ / How It Works */
+.faq {
+    padding: 3rem 0;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.faq h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+.faq ul {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+.faq li {
+    margin-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    position: relative;
+}
+.faq li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+}
+
+/* Footer */
+footer {
+    background: var(--text);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: 3rem;
+}
+footer a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+}
+footer a:hover {
+    color: white;
+}
+
+/* Utility */
+@media (max-width: 600px) {
+    .hero h1 { font-size: 1.75rem; }
+    .grid { gap: 1rem; }
+    textarea { height: 300px; }
+    .output-box { min-height: 300px; max-height: 400px; }
+}
