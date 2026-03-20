@@ -65,6 +65,10 @@ def init_db():
 init_db()
 
 # Minimal entrypoint guard added for Railway compatibility
+@app.route("/health")
+def health():
+    return {"status": "ok", "timestamp": datetime.datetime.utcnow().isoformat()}
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
