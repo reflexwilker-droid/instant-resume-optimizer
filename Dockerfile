@@ -10,5 +10,5 @@ COPY . .
 # Install all the necessary libraries for your project
 RUN pip install -r requirements.txt
 
-# Tell the container how to start your app
-CMD ["python", "resume_optimizer_app.py"]
+# Tell the container how to start your app - CHANGED to app.py
+CMD ["python", "app.py"]
