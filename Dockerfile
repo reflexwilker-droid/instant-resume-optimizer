@@ -11,4 +11,4 @@ COPY . .
 RUN pip install -r requirements.txt
 
 # Tell the container how to start your app - CHANGED to app.py
-CMD ["python", "app.py"]
+CMD exec gunicorn app:app --bind 0.0.0.0:$PORT
