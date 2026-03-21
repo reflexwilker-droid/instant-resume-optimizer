@@ -203,6 +203,7 @@ def index():
     return render_template("index.html",
         stripe_single=STRIPE_SINGLE,
         stripe_monthly=STRIPE_MONTHLY,
+        stripe_quarterly=STRIPE_QUARTERLY,
         stripe_annual=STRIPE_ANNUAL
     )
 
@@ -294,3 +295,4 @@ def health():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+0.0.0", port=5000)

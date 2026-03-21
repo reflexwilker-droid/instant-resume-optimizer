@@ -65,6 +65,16 @@
                     <p class="limit">1 rewrite (no email)<br>3 rewrites/month with email</p>
                     <button class="secondary" disabled>Current Plan</button>
                 </div>
+                <div class="plan">
+                    <h3>Quarterly</h3>
+                    <div class="price">$36<span>/3 months</span></div>
+                    <p class="features">• Up to 30 rewrites/month<br>• PDF export<br>• Priority support<br>• Save 20% vs monthly</p>
+                    {% if stripe_quarterly %}
+                    <a href="{{ stripe_quarterly }}" class="button primary" target="_blank">Subscribe</a>
+                    {% else %}
+                    <button class="primary" onclick="alert('Stripe link not configured. Contact admin.'); return false;">Subscribe</button>
+                    {% endif %}
+                </div>
                 <div class="plan featured">
                     <div class="popular">Most Popular</div>
                     <h3>Unlimited Monthly</h3>
