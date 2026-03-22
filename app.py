@@ -35,7 +35,7 @@ limiter = Limiter(
 
 # Config
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/stepfun/step-3.5-flash:free")
+DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/meta-llama/llama-3.3-70b-instruct")
 DB_PATH = Path("usage.db")
 STRIPE_SINGLE = os.getenv("STRIPE_PAYMENT_LINK_SINGLE")
 STRIPE_MONTHLY = os.getenv("STRIPE_PAYMENT_LINK_MONTHLY")
@@ -237,6 +237,15 @@ def rewrite():
         improved = call_openrouter(resume_text, tone)
         increment_usage(user["id"])
         return jsonify({"success": True, "resume": improved})
+    except requests.HTTPError as e:
+        # Capture OpenRouter's error response
+        try:
+            err_json = e.response.json()
+            err_msg = err_json.get("error", {}).get("message", str(e))
+        except:
+            err_msg = e.response.text if e.response else str(e)
+        app.logger.error(f"OpenRouter HTTP error: {err_msg}")
+        return jsonify({"error": "AI service error", "details": err_msg}), 500
     except Exception as e:
         app.logger.error(f"Rewrite failed: {e}")
         return jsonify({"error": "AI service error", "details": str(e)}), 500
