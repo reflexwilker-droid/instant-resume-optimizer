@@ -39,8 +39,6 @@ DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/stepfun/step-3.5-flash
 DB_PATH = Path("usage.db")
 STRIPE_SINGLE = os.getenv("STRIPE_PAYMENT_LINK_SINGLE")
 STRIPE_MONTHLY = os.getenv("STRIPE_PAYMENT_LINK_MONTHLY")
-STRIPE_QUARTERLY = os.getenv("STRIPE_PAYMENT_LINK_QUARTERLY")
-STRIPE_ANNUAL = os.getenv("STRIPE_PAYMENT_LINK_ANNUAL")
 
 if not OPENROUTER_API_KEY:
     raise RuntimeError("OPENROUTER_API_KEY not set in environment")
@@ -203,9 +201,7 @@ def tips():
 def index():
     return render_template("index.html",
         stripe_single=STRIPE_SINGLE,
-        stripe_monthly=STRIPE_MONTHLY,
-        stripe_quarterly=STRIPE_QUARTERLY,
-        stripe_annual=STRIPE_ANNUAL
+        stripe_monthly=STRIPE_MONTHLY
     )
 
 @app.route("/rewrite", methods=["POST"])
