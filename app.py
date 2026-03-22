@@ -14,6 +14,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from dotenv import load_dotenv
 import requests
+from requests.exceptions import HTTPError
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
@@ -35,7 +36,7 @@ limiter = Limiter(
 
 # Config
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "openrouter/meta-llama/llama-3.3-70b-instruct")
+DEFAULT_MODEL = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct")
 DB_PATH = Path("usage.db")
 STRIPE_SINGLE = os.getenv("STRIPE_PAYMENT_LINK_SINGLE")
 STRIPE_MONTHLY = os.getenv("STRIPE_PAYMENT_LINK_MONTHLY")
@@ -237,7 +238,7 @@ def rewrite():
         improved = call_openrouter(resume_text, tone)
         increment_usage(user["id"])
         return jsonify({"success": True, "resume": improved})
-    except requests.HTTPError as e:
+    except HTTPError as e:
         # Capture OpenRouter's error response
         try:
             err_json = e.response.json()
